@@ -1,59 +1,120 @@
-# Semantic Course Search with Vector Databases
+# 📘 Semantic Course Search with Vector Databases
 
-This project builds and evaluates a semantic search engine for online course content using modern embedding models and a vector database. The goal is to compare different semantic search strategies and deploy the best-performing approach as an interactive application.
+This project designs, evaluates, and deploys a **semantic search system for online course content** using modern sentence embeddings and a vector database.  
+The goal is to compare multiple semantic search strategies and deploy the **best-performing approach** as an interactive web application.
 
 ---
 
-## 🚀 Project Overview
+## 🚀 Project Motivation
 
-Traditional keyword-based search often fails to capture the semantic meaning of user queries. This project explores vector-based semantic search to retrieve relevant educational content from course descriptions and course sections.
+Traditional keyword-based search systems often fail to capture the **semantic intent** behind user queries, especially in educational content where meaning and context matter more than exact word matches.
 
-The project evaluates multiple embedding strategies and data granularities, and deploys the most effective method in a Streamlit application.
+This project addresses that limitation by leveraging **vector-based semantic search**, enabling retrieval of course content based on **conceptual similarity rather than keywords**.
+
+Multiple embedding models and data granularities are evaluated to identify the most accurate and context-aware solution.
 
 ---
 
 ## 📊 Datasets
 
-Two datasets are used:
+Two datasets are used to explore different levels of semantic granularity:
 
-- **Course-level descriptions**  
-  `course_descriptions.csv`  
-  Contains high-level descriptions of each course.
+### 🔹 Course-level descriptions
+- **File:** `course_descriptions.csv`
+- High-level summaries describing the overall content of each course.
 
-- **Section-level descriptions**  
-  `course_section_descriptions.csv`  
-  Contains fine-grained section descriptions within each course.
+### 🔹 Section-level descriptions
+- **File:** `course_section_descriptions.csv`
+- Fine-grained descriptions of individual sections within each course, enabling more precise retrieval.
 
 ---
 
-## 🧠 Compared Approaches
+## 🧠 Evaluated Semantic Search Approaches
 
-Four semantic search strategies were implemented and evaluated:
+Four semantic search strategies were implemented and compared.
+
+---
 
 ### 1️⃣ Course-level Search (Baseline)
-- Data: Course descriptions
-- Model: `all-MiniLM-L6-v2`
-- Granularity: Course level  
-- Fast but coarse-grained semantic matching
+- **Data:** Course descriptions  
+- **Model:** `all-MiniLM-L6-v2`  
+- **Granularity:** Course level  
+
+A fast and lightweight baseline providing coarse-grained semantic matching.
+
+📌 *Strength:* Fast  
+📌 *Limitation:* Low precision
+
+---
 
 ### 2️⃣ Section-level Search (MiniLM)
-- Data: Course section descriptions
-- Model: `all-MiniLM-L6-v2`
-- Granularity: Section level  
-- More precise retrieval with lightweight embeddings
+- **Data:** Course section descriptions  
+- **Model:** `all-MiniLM-L6-v2`  
+- **Granularity:** Section level  
 
-### 3️⃣ Section-level Search (BERT, Unweighted)
-- Data: Course section descriptions
-- Model: `multi-qa-distilbert-cos-v1`
-- Strong semantic understanding but no structural weighting
+Improves retrieval precision by operating at section granularity while maintaining low computational cost.
 
-### 4️⃣ Section-level Search (BERT, Weighted) ✅ *Final Model*
-- Data: Course section descriptions
-- Model: `multi-qa-distilbert-cos-v1`
-- Weighted semantic similarity across multiple text fields
-- Best balance of precision and semantic relevance
+📌 *Strength:* Efficient and more precise  
+📌 *Limitation:* Limited semantic depth
 
-> **The deployed application uses Approach 4**, which demonstrated the most accurate and context-aware retrieval.
+---
+
+### 3️⃣ Section-level Search (BERT – Unweighted)
+- **Data:** Course section descriptions  
+- **Model:** `multi-qa-distilbert-cos-v1`  
+
+Leverages a stronger transformer-based embedding model for improved semantic understanding, without applying explicit weighting across text components.
+
+📌 *Strength:* Strong semantic understanding  
+📌 *Limitation:* Context not explicitly reinforced
+
+---
+
+### 4️⃣ Section-level Search (BERT – Weighted) ✅ **Final Model**
+- **Data:** Course section descriptions  
+- **Model:** `multi-qa-distilbert-cos-v1`  
+- **Technique:** Weighted semantic embeddings  
+
+Introduces **weighted semantic representations** to emphasize the core semantic intent of user queries while reinforcing contextual relevance.
+
+📌 *Strength:* Best balance of precision, relevance, and interpretability  
+📌 *Selected for deployment*
+
+---
+
+## 🖥️ Deployed Application
+
+The final model is deployed as an interactive **Streamlit application**, allowing users to:
+
+- Enter natural language queries
+- Retrieve the most semantically relevant course sections
+- Inspect similarity scores
+- Explore section-level descriptions
+
+### 🔍 Application Demo
+
+![Semantic Course Search UI](assets/app_ui.png)
+
+---
+
+### 📈 Example Search Results
+
+The system retrieves highly relevant course sections based on semantic similarity rather than keyword overlap.
+
+![Semantic Search Results](assets/search_results.jpg)
+
+---
+
+## 🧪 Weighted Semantic Querying (Key Idea)
+
+Instead of encoding user queries once, the final approach **reinforces semantic intent** by combining multiple embeddings:
+
+- Primary query embedding
+- Contextualized query embedding
+
+These embeddings are combined using weighted averaging before querying the vector database.
+
+This technique improves retrieval quality for ambiguous or short user queries.
 
 ---
 
@@ -71,6 +132,10 @@ semantic-course-search/
 │   ├── 02_section_level_minilm.ipynb
 │   ├── 03_section_level_bert.ipynb
 │   └── 04_section_level_bert_weighted.ipynb
+│
+├── assets/
+│   ├── app_ui.png
+│   └── search_results.png
 │
 ├── result/
 │   └── qualitative_examples.md
