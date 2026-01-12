@@ -1,8 +1,7 @@
-pandas
+streamlit>=1.30
+pinecone>=5.0.0
+sentence-transformers>=2.2.2
+torch
 numpy
-sentence-transformers
-pinecone-client
-streamlit
-scikit-learn
-tqdm
+pandas
 python-dotenv
